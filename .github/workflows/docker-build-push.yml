@@ -26,7 +26,7 @@ jobs:
         run: |
           # Extract the base image tag from the Dockerfile
           DOCKERFILE_CONTENT=$(cat Dockerfile)
-          TAG_REGEX="FROM rocker/ml-verse:([^[:space:]]+)"
+          TAG_REGEX="FROM rocker/geospatial:([^[:space:]]+)"
           ORIGINAL_TAG=$(echo "$DOCKERFILE_CONTENT" | grep -oE "$TAG_REGEX" | awk -F ":" '{print $2}')
           if [[ -n $ORIGINAL_TAG ]]; then
             echo "::set-output name=tag::$ORIGINAL_TAG"
@@ -65,7 +65,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           # Build the new Docker image with the combined tag
-          docker build -t rmgpanw/ml-verse:${{ steps.generate_tag.outputs.tag }} .
+          docker build -t rmgpanw/geospatial:${{ steps.generate_tag.outputs.tag }} .
 
           # Push the new Docker image
-          docker push rmgpanw/ml-verse:${{ steps.generate_tag.outputs.tag }}
+          docker push rmgpanw/geospatial:${{ steps.generate_tag.outputs.tag }}
