@@ -26,7 +26,7 @@ jobs:
         run: |
           # Extract the base image tag from the Dockerfile
           DOCKERFILE_CONTENT=$(cat Dockerfile)
-          TAG_REGEX="FROM rocker/verse:([^[:space:]]+)"
+          TAG_REGEX="FROM rocker/ml-verse:([^[:space:]]+)"
           ORIGINAL_TAG=$(echo "$DOCKERFILE_CONTENT" | grep -oE "$TAG_REGEX" | awk -F ":" '{print $2}')
           if [[ -n $ORIGINAL_TAG ]]; then
             echo "::set-output name=tag::$ORIGINAL_TAG"
