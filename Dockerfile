@@ -1,15 +1,15 @@
 FROM rocker/geospatial:4.3
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    software-properties-common \
-    && add-apt-repository ppa:marutter/rrutter4.0 \
-    && apt-get update && apt-get install -y --no-install-recommends \
-    libxml2-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    #    libmariadbclient-dev \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     software-properties-common \
+#     && add-apt-repository ppa:marutter/rrutter4.0 \
+#     && apt-get update && apt-get install -y --no-install-recommends \
+#     libxml2-dev \
+#     libssl-dev \
+#     libcurl4-openssl-dev \
+#    libmariadbclient-dev \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Install remotes R package
 RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
