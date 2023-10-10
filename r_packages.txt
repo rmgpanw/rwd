@@ -12,7 +12,6 @@ dplyr
 duckdb
 emmeans
 eye
-eyeScreenR
 flextable
 future
 future.batchtools
@@ -28,6 +27,7 @@ devtools
 igraph
 patchwork
 pingr
+quarto
 RColorBrewer
 reactable
 renv

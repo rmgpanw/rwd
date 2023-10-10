@@ -12,13 +12,13 @@ FROM rocker/geospatial:4.3
 #     && rm -rf /var/lib/apt/lists/*
 
 # Install remotes R package
-RUN R -e 'install.packages("remotes", repos = "https://cloud.r-project.org")'
+RUN R -e 'install.packages("remotes")'
 
 # Copy the r_packages.txt file to the image working directory
 COPY r_packages.txt /
 
 # Install system dependencies for the specified R packages
-RUN Rscript -e 'args <- readLines("r_packages.txt"); writeLines(remotes::system_requirements("ubuntu", "18.04", package = args))' | \
+RUN Rscript -e 'args <- readLines("r_packages.txt"); writeLines(remotes::system_requirements("ubuntu", "20.04", package = args))' | \
     while read -r cmd; do \
     echo $cmd && eval sudo $cmd; \
     done
@@ -29,6 +29,7 @@ RUN Rscript -e 'args <- readLines("r_packages.txt"); writeLines(remotes::system_
 # RUN R -e 'remotes::install_cran(c("nanonext", "devtools", "tidyverse"))'
 RUN Rscript -e 'install.packages(readLines("r_packages.txt"))'
 RUN Rscript -e 'devtools::install_github("rmgpanw/ourproj")'
+RUN Rscript -e 'devtools::install_gitlab("abolvera/eyescreenr")'
 
 # Set the entry point or command if required
 # ENTRYPOINT ["R"]
