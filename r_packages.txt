@@ -46,3 +46,8 @@ usethis
 visNetwork
 workflowr
 zoo
+probably
+epitools
+here
+lme4
+lmerTest
