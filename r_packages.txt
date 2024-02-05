@@ -51,3 +51,4 @@ epitools
 here
 lme4
 lmerTest
+ROCR
