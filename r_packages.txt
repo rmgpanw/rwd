@@ -53,3 +53,4 @@ lme4
 lmerTest
 ROCR
 mfp
+rms
