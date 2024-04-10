@@ -67,3 +67,5 @@ riskRegression
 pec
 PredictABEL
 predtools
+JM
+joineR
