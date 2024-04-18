@@ -69,3 +69,4 @@ PredictABEL
 predtools
 JM
 joineR
+JMbayes
