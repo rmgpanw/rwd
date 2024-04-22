@@ -30,6 +30,8 @@ RUN Rscript -e 'args <- readLines("r_packages.txt"); writeLines(remotes::system_
 RUN Rscript -e 'install.packages(readLines("r_packages.txt"))'
 RUN Rscript -e 'devtools::install_github("rmgpanw/ourproj")'
 RUN Rscript -e 'devtools::install_gitlab("abolvera/eyescreenr")'
+RUN Rscript -e 'devtools::install_github("rmgpanw/codemapper@dev_sct_trud")'
+RUN Rscript -e 'devtools::install_github("rmgpanw/ukbwranglr")'
 
 # Set the entry point or command if required
 # ENTRYPOINT ["R"]
