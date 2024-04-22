@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build:
@@ -17,55 +18,33 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Get commit SHA
-        id: extract_commit_sha
-        run: echo "::set-output name=commit_sha::${{ github.sha }}" 
-
-      - name: Get original image tag
-        id: extract_tag
+      - name: Set image tag name
+        id: image_tag
         run: |
-          # Extract the base image tag from the Dockerfile
-          DOCKERFILE_CONTENT=$(cat Dockerfile)
-          TAG_REGEX="FROM rocker/geospatial:([^[:space:]]+)"
-          ORIGINAL_TAG=$(echo "$DOCKERFILE_CONTENT" | grep -oE "$TAG_REGEX" | awk -F ":" '{print $2}')
-          if [[ -n $ORIGINAL_TAG ]]; then
-            echo "::set-output name=tag::$ORIGINAL_TAG"
-          else
-            echo "Failed to extract the tag from the Dockerfile"
-            exit 1
-          fi
+          # tag name
+          TAG_BASE="rmgpanw/rwd"
+          TAG_NAME="${TAG_BASE}:$(cat VERSION.md)"
+          TAG_NAME_DEV="${TAG_BASE}:$(cat VERSION.md)-dev"
+          echo "::set-output name=tag_base::${TAG_BASE}" 
+          echo "::set-output name=tag_name::${TAG_NAME}"
+          echo "::set-output name=tag_name_dev::${TAG_NAME_DEV}"
 
-      - name: Determine new tag
-        id: generate_tag
-        run: |
-          # Extract the first 7 characters from the commit SHA
-          COMMIT_SHA_SHORT=$(echo ${{ steps.extract_commit_sha.outputs.commit_sha }} | cut -c1-7)
+      - name: Build and push latest
+        uses: docker/build-push-action@v5
+        if: github.ref == 'refs/heads/main'
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.image_tag.outputs.tag_name }} , ${{ steps.image_tag.outputs.tag_base }}:latest
+          cache-from: type=registry,ref=${{ steps.image_tag.outputs.tag_name }}
+          cache-to: type=inline
 
-          # Combine the original tag and the first 7 characters of the commit SHA
-          NEW_TAG="${{ steps.extract_tag.outputs.tag }}-${COMMIT_SHA_SHORT}"
-          echo "::set-output name=tag::$NEW_TAG"
-       
-      # Use github actions https://github.com/marketplace/actions/free-disk-space-ubuntu 
-      #  See also SO post: https://github.com/orgs/community/discussions/26351#discussioncomment-3251595
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # this might remove tools that are actually needed,
-      #     # if set to "true" but frees about 6 GB
-      #     tool-cache: false
-      #   
-      #     # all of these default to true, but feel free to set to
-      #     # "false" if necessary for your workflow
-      #     android: true
-      #     dotnet: true
-      #     haskell: true
-      #     large-packages: true
-      #     swap-storage: true
-
-      - name: Build and push Docker image
-        run: |
-          # Build the new Docker image with the combined tag
-          docker build -t rmgpanw/geospatial:${{ steps.generate_tag.outputs.tag }} .
-
-          # Push the new Docker image
-          docker push rmgpanw/geospatial:${{ steps.generate_tag.outputs.tag }}
+      - name: Build and push dev
+        uses: docker/build-push-action@v5
+        if: github.ref == 'refs/heads/dev'
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.image_tag.outputs.tag_name_dev }}
+          cache-from: type=registry,ref=${{ steps.image_tag.outputs.tag_name_dev }}
+          cache-to: type=inline
