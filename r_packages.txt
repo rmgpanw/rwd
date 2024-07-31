@@ -70,3 +70,6 @@ predtools
 JM
 joineR
 JMbayes
+mortdat65$mod3lp<-predict(coxmod3,mortdat65, type="lp")
+survmod653<-coxph(Surv(tt_death, deathind)~mod3lp, data=mortdat65)
+survivalROC
