@@ -1,4 +1,4 @@
-FROM rocker/geospatial:4.3
+FROM rocker/geospatial:4.4
 
 # Install system dependencies
 # RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -33,5 +33,40 @@ RUN Rscript -e 'devtools::install_gitlab("abolvera/eyescreenr")'
 RUN Rscript -e 'devtools::install_github("rmgpanw/codemapper@dev_sct_trud")'
 RUN Rscript -e 'devtools::install_github("rmgpanw/ukbwranglr")'
 
-# Set the entry point or command if required
-# ENTRYPOINT ["R"]
+# Install system dependencies for Python
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    software-properties-common \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    libpq-dev \
+    curl \
+    git \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add the DeadSnakes PPA and its GPG key
+# RUN curl -fsSL https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu/gpgkey | gpg --dearmor -o /etc/apt/trusted.gpg.d/deadsnakes-archive.gpg && \
+# echo "deb https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list
+
+# Install Python 3.12 and its dependencies
+RUN add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y python3.12 python3.12-venv python3.12-dev python3-pip \
+    python3.12-distutils python3-apt
+
+# Set Python 3.12 as default
+RUN ln -sf /usr/bin/python3.12 /usr/bin/python3
+
+# Download and install pip directly
+RUN curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3 get-pip.py && \
+    rm get-pip.py
+
+# Copy and install Python dependencies from requirements.txt (project-specific)
+COPY requirements.txt /
+RUN pip3 install --no-cache-dir --ignore-installed -r /requirements.txt
+
+# Expose ports for JupyterLab and RStudio Server
+EXPOSE 8787 8888

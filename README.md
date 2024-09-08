@@ -15,7 +15,7 @@ See also:
 
 ## Usage instructions
 
-- Pull image with `docker pull rmgpanw/geospatial:<TAG>`
+- Pull image with `docker pull rmgpanw/rwd:<TAG>`
 - Open a terminal in the directory to be bind mounted and launch container with (changing 'password' to something more secure):
 
 ```
@@ -24,8 +24,8 @@ project_dir=$(pwd)
 docker run -e PASSWORD=password \
 --rm -p 8787:8787 \
 -v ${project_dir}:/home/rstudio/my-project \
-rmgpanw/geospatial:<TAG>
+rmgpanw/rwd:<TAG>
 ```
 
 - Open a browser window with `localhost:8787` and login to RStudio with username 'rstudio' and the password set in the previous step
-
+- To run Jupyter Lab use `jupyter lab --ip=0.0.0.0 --allow-root --no-browser`, which uses port `8888`

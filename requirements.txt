@@ -1,0 +1,13 @@
+great-tables
+jupyter
+jupyterlab
+matplotlib
+numpy
+pandas
+plotly
+quarto
+scikit-learn
+scipy
+seaborn
+statsmodels
+streamlit

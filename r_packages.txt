@@ -51,6 +51,7 @@ quarto
 RColorBrewer
 reactable
 renv
+reticulate
 riskRegression
 rmda
 rms
