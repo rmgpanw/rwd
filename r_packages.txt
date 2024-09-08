@@ -61,6 +61,7 @@ rstudioapi
 shiny
 shinybusy
 shinyWidgets
+sjPlot
 stringi
 survival
 survivalROC
