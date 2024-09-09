@@ -11,3 +11,6 @@ scipy
 seaborn
 statsmodels
 streamlit
+torch
+torchaudio
+torchvision
