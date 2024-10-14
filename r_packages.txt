@@ -1,5 +1,7 @@
 broom
+broom.helpers
 bs4Dash
+cardx
 clustermq
 cowplot
 coxme
@@ -8,7 +10,6 @@ crosstalk
 data.table
 DBI
 dcurves
-devtools
 devtools
 dplyr
 duckdb
